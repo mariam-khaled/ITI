@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class PassengerProvider {
     private DataFrame passengerDataFrame;
-    public DataFrame readCSV(String path) {
+    public DataFrame readTrainCSV(String path) {
         CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
         DataFrame df = null;
         try {
@@ -29,6 +29,23 @@ public class PassengerProvider {
         // System.out.println (df.summary ());
         return df;
     }
+    
+    public DataFrame readtTestCSV(String path) {
+        CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
+        DataFrame df = null;
+        try {
+            df = Read.csv (path, format);
+            System.out.println(df.summary ());
+            df = df.select ("Name", "Pclass", "Age", "Sex");
+            System.out.println(df.summary ());
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace ();
+        }
+        passengerDataFrame = df;
+        // System.out.println (df.summary ());
+        return df;
+    }
+    
     public DataFrame getPassengerDataFrame() {
         return passengerDataFrame;
     }
