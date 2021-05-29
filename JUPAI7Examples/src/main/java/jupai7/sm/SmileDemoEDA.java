@@ -11,40 +11,44 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.javatuples.Triplet;
+import smile.validation.*;
 import smile.validation.metric.Accuracy;
 
 public class SmileDemoEDA {
     String trainPath = "src/main/resources/data/titanic_train.csv";
     String testPath = "src/main/resources/data/titanic_test.csv";
-
+    String fullPath = "src/main/resources/data/titanic_full.csv";
+    
     public static void main(String[] args) throws IOException {
         SmileDemoEDA sd = new SmileDemoEDA ();
         PassengerProvider pProvider = new PassengerProvider ();
-        DataFrame trainData = pProvider.readCSV (sd.trainPath);
+        DataFrame trainData = pProvider.readTrainCSV (sd.trainPath);
         System.out.println (trainData.structure ());
-        System.in.read();
+        //System.in.read();
         System.out.println (trainData.summary ());
-         System.in.read();
+        // System.in.read();
         trainData = trainData.merge (IntVector.of ("Gender", encodeCategory (trainData, "Sex")));
         trainData = trainData.merge (IntVector.of ("PClassValues", encodeCategory (trainData, "Pclass")));
 
         System.out.println ("=======Encoding Non Numeric Data==============");
         System.out.println (trainData.structure ());
-         System.in.read();
+        // System.in.read();
         System.out.println ("=======Dropping the Name, Pclass, and Sex Columns==============");
         trainData = trainData.drop ("Name");
         trainData=trainData.drop("Pclass");
         trainData=trainData.drop("Sex");
         System.out.println (trainData.structure ());
-         System.in.read();
+        // System.in.read();
         System.out.println (trainData.summary ());
-         System.in.read();
+        // System.in.read();
         trainData = trainData.omitNullRows ();
         System.out.println ("=======After Omitting null Rows==============");
         System.out.println (trainData.summary ());
-         System.in.read();
+        // System.in.read();
         System.out.println ("=======Start of Explaratory Data Analysis==============");
         try {
             eda (trainData);
@@ -55,16 +59,18 @@ public class SmileDemoEDA {
         System.out.println("feature importance:");
         System.out.println(Arrays.toString(model.importance()));
         System.out.println(model.metrics ());
+      
         //TODO load test data to validate model
-        DataFrame testData = pProvider.readCSV (sd.testPath);
-        testData = testData.merge (IntVector.of ("Gender", encodeCategory (testData, "Sex")));
-        testData = testData.merge (IntVector.of ("PClassValues", encodeCategory (testData, "Pclass")));
+        SmileDemoEDA testSd = new SmileDemoEDA ();
+        PassengerProvider testPprovider = new PassengerProvider ();
+        DataFrame testData = testPprovider.readtTestCSV(testSd.testPath);
+        testData = testData.merge (IntVector.of ("Gender", encodeCategory(testData, "Sex")));
         testData = testData.drop ("Name");
-        testData = testData.drop("Pclass");
         testData = testData.drop("Sex");
-        testData = testData.omitNullRows ();
-        System.out.println(Accuracy.of(testData.column("Survived").toIntArray(), model.predict(testData)));
-        
+        testData = testData.omitNullRows();
+        int [][] results = model.test(testData);
+        System.out.println(Arrays.deepToString(results));
+      
     }
 
     public static int[] encodeCategory(DataFrame df, String columnName) {
