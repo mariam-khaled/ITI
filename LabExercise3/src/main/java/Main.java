@@ -13,13 +13,15 @@ public class Main{
         CountryDAO countryDAO = new CountryDAO();
         CityDAO cityDAO = new CityDAO();
         
-        List<Country> countries = countryDAO.readCountriesFromCSV("D:\\ITI\\Java\\countries.csv");
-        List<City> cities = cityDAO.readCitiesFromCSV("D:\\ITI\\Java\\cities.csv");
+        List<Country> countries = countryDAO.readCountriesFromCSV("data/countries.csv");
+        List<City> cities = cityDAO.readCitiesFromCSV("data/cities.csv");
         
         Information info = new Information(countries, cities);
         
         info.highestPopulationCityPerCountry();
+        System.out.println("+++++++++++");
         info.highestPopulationCityPerContinent();
+        System.out.println("+++++++++++");
         info.highestPopulationCapital();
     
     }
