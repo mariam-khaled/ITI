@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.javatuples.Triplet;
+import smile.data.vector.StringVector;
 import smile.validation.*;
 import smile.validation.metric.Accuracy;
 
@@ -64,13 +65,27 @@ public class SmileDemoEDA {
         SmileDemoEDA testSd = new SmileDemoEDA ();
         PassengerProvider testPprovider = new PassengerProvider ();
         DataFrame testData = testPprovider.readtTestCSV(testSd.testPath);
+        //preparing 'sex' attribute
         testData = testData.merge (IntVector.of ("Gender", encodeCategory(testData, "Sex")));
+        //preparing 'pclass' attribute'
+        String[] pc = new String[testData.size()];
+        for(int row = 0 ; row<testData.size(); row++)
+            pc[row] = testData.column("Pclass").get(row).toString();
+      
+        testData = testData.merge(StringVector.of("SPclass", pc));
+        testData = testData.merge (IntVector.of ("PClassValues", encodeCategory (testData, "SPclass")));
+        testData = testData.drop("Pclass");
+        testData = testData.drop("SPclass");
         testData = testData.drop ("Name");
         testData = testData.drop("Sex");
         testData = testData.omitNullRows();
-        int [][] results = model.test(testData);
-        System.out.println(Arrays.deepToString(results));
-      
+        System.out.println(testData.summary());
+        //validation 1st way
+        int [] results = model.predict(testData);
+        System.out.println(Arrays.toString(results));
+        //validation 2nd way
+        int [][] out = model.test(testData);
+        System.out.println(Arrays.deepToString(out));
     }
 
     public static int[] encodeCategory(DataFrame df, String columnName) {
