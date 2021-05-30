@@ -8,7 +8,7 @@ public class MainClass {
     {
         PyramidCSVDAO pDAO = new PyramidCSVDAO();
         
-        List<Pyramid> pyramids = pDAO.readPyramidsFromCSV("D:\\ITI\\Java\\pyramids.csv");
+        List<Pyramid> pyramids = pDAO.readPyramidsFromCSV("data/pyramids.csv");
         
         int i = 0;
         for(Pyramid p : pyramids)

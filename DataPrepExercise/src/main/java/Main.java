@@ -15,18 +15,18 @@ public class Main {
     public static void main(String [] args) throws IOException{
         
         //using joinery
-        DataFrame<Object> df = DataFrame.readCsv("D:\\ITI\\Java\\titanic.csv");
+        DataFrame<Object> df = DataFrame.readCsv("data/titanic.csv");
         System.out.println(df.describe());
         
         //using tablesaw
         Table t = Table.read().usingOptions(CsvReadOptions
-        .builder("D:\\ITI\\Java\\titanic.csv")
+        .builder("data/titanic.csv")
         .missingValueIndicator(""));
         System.out.println(t.summary().toString());
         
         //Using joinery
-        DataFrame<Object> df1 = DataFrame.readCsv("D:\\ITI\\Java\\dataframe1.csv");
-        DataFrame<Object> df2 = DataFrame.readCsv("D:\\ITI\\Java\\dataframe2.csv");
+        DataFrame<Object> df1 = DataFrame.readCsv("data/dataframe1.csv");
+        DataFrame<Object> df2 = DataFrame.readCsv("data/dataframe2.csv");
         
         df2.merge(df1,JoinType.LEFT);
         
@@ -35,11 +35,11 @@ public class Main {
         
         //using tablesaw
         Table t1 = Table.read().usingOptions(CsvReadOptions
-        .builder("D:\\ITI\\Java\\dataframe1.csv")
+        .builder("data/dataframe1.csv")
         .missingValueIndicator(""));
         
         Table t2 = Table.read().usingOptions(CsvReadOptions
-        .builder("D:\\ITI\\Java\\dataframe2.csv")
+        .builder("data/dataframe2.csv")
         .missingValueIndicator(""));
         
         List<Double> list1 = Arrays.asList(new Double[]{5.0, 90.7});

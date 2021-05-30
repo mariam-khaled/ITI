@@ -13,8 +13,8 @@ public class Main{
         CountryDAO countryDAO = new CountryDAO();
         CityDAO cityDAO = new CityDAO();
         
-        List<Country> countries = countryDAO.readCountriesFromCSV("D:\\ITI\\Java\\countries.csv");
-        List<City> cities = cityDAO.readCitiesFromCSV("D:\\ITI\\Java\\cities.csv");
+        List<Country> countries = countryDAO.readCountriesFromCSV("data/countries.csv");
+        List<City> cities = cityDAO.readCitiesFromCSV("data/cities.csv");
         
         HashMap<Integer,LinkedList<City> > map = new HashMap<Integer,LinkedList<City>>();
         

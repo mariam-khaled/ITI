@@ -41,9 +41,8 @@ public class PyramidCSVDAO {
                 
                 else if(first)
                 {   
-                    String[] data = line.split(",");
-                    System.out.println(data[0]+","+data[2]+","+data[4]+","+data[7]);
                     first = false;
+                    continue;
                 }
                
             }   
